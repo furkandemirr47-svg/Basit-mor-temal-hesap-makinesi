@@ -1,0 +1,1 @@
+# Basit-mor-temal-hesap-makinesi
