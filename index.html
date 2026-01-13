@@ -2,140 +2,700 @@
 <html lang="tr">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Hesap Makinesi</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Okul Sistemi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: Arial;
-            background: #6a0dad;
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #ec4899;
+            --bg-dark: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.1);
+            --glass: blur(12px);
+            --gradient: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+        }
+
+        * {
             margin: 0;
             padding: 0;
-        }
-
-        .kutu {
-            width: 320px;
-            margin: 60px auto;
-            padding: 18px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-        }
-
-        .ekran {
-            width: 100%;
-            height: 56px;
-            font-size: 26px;
-            text-align: right;
-            padding: 10px;
             box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            margin-bottom: 14px;
-            outline: none;
+            font-family: 'Outfit', sans-serif;
         }
 
-        .tuslar {
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(236, 72, 153, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            min-height: 600px;
+            position: relative;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Cards & Glassmorphism */
+        .glass-card {
+            background: var(--bg-card);
+            backdrop-filter: var(--glass);
+            -webkit-backdrop-filter: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        /* Main Menu Grid */
+        .menu-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .menu-card {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .menu-card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--text-light);
+        }
+
+        .menu-card p {
+            color: var(--text-muted);
+        }
+
+        .icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        /* Forms & Inputs */
+        input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-light);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
         }
 
         button {
-            height: 52px;
-            font-size: 18px;
+            width: 100%;
+            padding: 1rem;
+            background: var(--gradient);
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
         button:hover {
-            opacity: 0.95;
+            opacity: 0.9;
+            transform: scale(1.02);
         }
 
-        button:active {
-            transform: scale(0.98);
+        button.back-btn {
+            background: transparent;
+            border: 1px solid var(--border);
+            margin-bottom: 1rem;
+            width: auto;
+            padding: 0.5rem 1.5rem;
+            font-size: 0.9rem;
         }
 
-        .sayi {
-            background: #ecf0f1;
+        button.back-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: none;
         }
 
-        .islem {
-            background: #3498db;
-            color: white;
+        /* Student List Grid */
+        .student-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
         }
 
-        .temiz {
-            background: #e74c3c;
-            color: white;
+        .student-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .esit {
-            background: #2ecc71;
-            color: white;
+        .student-card:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .student-card span {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-bottom: 1rem;
+        }
+
+        th,
+        td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+        }
+
+        td {
+            color: var(--text-light);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Grades Input in Modal */
+        .grade-input-group {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+        }
+
+        .grade-input-group label {
+            font-weight: 500;
+        }
+
+        .grade-input-group input {
+            margin-bottom: 0;
+            padding: 0.5rem;
+            text-align: center;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1e293b;
+            border: 1px solid var(--border);
+            padding: 2rem;
+            border-radius: 24px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: scaleUp 0.3s ease;
+        }
+
+        @keyframes scaleUp {
+            from {
+                transform: scale(0.9);
+                opacity: 0;
+            }
+
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 2rem;
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+        }
+
+        .close-btn:hover {
+            color: var(--text-light);
+            transform: none;
+        }
+
+        .average-card {
+            background: var(--gradient);
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin-top: 2rem;
+            text-align: center;
+        }
+
+        .average-card h3 {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 0.5rem;
+        }
+
+        .average-card .score {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .grade-input-group {
+                grid-template-columns: 1fr;
+                gap: 0.5rem;
+            }
         }
     </style>
 </head>
 
 <body>
 
-    <div class="kutu">
-        <input class="ekran" id="ekran" readonly>
+    <div class="container">
+        <header>
+            <h1>Dijital Okul Sistemi</h1>
+            <p class="subtitle">Eğitim Takip ve Yönetim Platformu</p>
+        </header>
 
-        <div class="tuslar">
-            <button class="temiz" onclick="temizle()">C</button>
-            <button class="islem" onclick="sil()">⌫</button>
-            <button class="islem" onclick="ekle('/')">÷</button>
-            <button class="islem" onclick="ekle('*')">×</button>
+        <!-- Main Menu View -->
+        <div id="main-menu" class="view active">
+            <div class="menu-grid">
+                <div class="menu-card" onclick="showView('teacher-login')">
+                    <span class="icon">👨‍🏫</span>
+                    <h2>Öğretmen Girişi</h2>
+                    <p>Not girişi ve öğrenci yönetimi</p>
+                </div>
+                <div class="menu-card" onclick="showView('student-dashboard')">
+                    <span class="icon">🎓</span>
+                    <h2>Öğrenci Girişi</h2>
+                    <p>Karne ve not ortalaması görüntüleme</p>
+                </div>
+            </div>
+        </div>
 
-            <button class="sayi" onclick="ekle('7')">7</button>
-            <button class="sayi" onclick="ekle('8')">8</button>
-            <button class="sayi" onclick="ekle('9')">9</button>
-            <button class="islem" onclick="ekle('-')">−</button>
+        <!-- Teacher Login View -->
+        <div id="teacher-login" class="view">
+            <div class="glass-card" style="max-width: 400px; margin: 0 auto;">
+                <button class="back-btn" onclick="showView('main-menu')">← Geri</button>
+                <h2 style="margin-bottom: 1.5rem;">Öğretmen Paneli</h2>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Şifre</label>
+                    <input type="password" id="teacher-password" placeholder="Şifrenizi giriniz...">
+                </div>
+                <button onclick="attemptTeacherLogin()">Giriş Yap</button>
+            </div>
+        </div>
 
-            <button class="sayi" onclick="ekle('4')">4</button>
-            <button class="sayi" onclick="ekle('5')">5</button>
-            <button class="sayi" onclick="ekle('6')">6</button>
-            <button class="islem" onclick="ekle('+')">+</button>
+        <!-- Teacher Dashboard View -->
+        <div id="teacher-dashboard" class="view">
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <button class="back-btn" onclick="showView('main-menu')" style="margin-bottom: 0;">Çıkış
+                        Yap</button>
+                    <h3>Öğrenci Listesi</h3>
+                </div>
+                <p style="color: var(--text-muted);">Not girmek istediğiniz öğrenciyi seçiniz:</p>
+                <div class="student-grid" id="teacher-student-list">
+                    <!-- Students will be populated here -->
+                </div>
+            </div>
+        </div>
 
-            <button class="sayi" onclick="ekle('1')">1</button>
-            <button class="sayi" onclick="ekle('2')">2</button>
-            <button class="sayi" onclick="ekle('3')">3</button>
-            <button class="esit" onclick="hesapla()">=</button>
+        <!-- Student Dashboard View (Student Selection) -->
+        <div id="student-dashboard" class="view">
+            <div class="glass-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <button class="back-btn" onclick="showView('main-menu')" style="margin-bottom: 0;">← Ana
+                        Menü</button>
+                    <h3>Öğrenci Portalı</h3>
+                </div>
+                <p style="color: var(--text-muted);">Notlarınızı görüntülemek için isminizi seçiniz:</p>
+                <div class="student-grid" id="student-selection-list">
+                    <!-- Students will be populated here -->
+                </div>
+            </div>
+        </div>
 
-            <button class="sayi" onclick="ekle('0')">0</button>
-            <button class="sayi" onclick="ekle('.')">.</button>
-            <button class="sayi" onclick="ekle('(')">(</button>
-            <button class="sayi" onclick="ekle(')')">)</button>
+        <!-- Student Report Card View -->
+        <div id="report-card" class="view">
+            <div class="glass-card">
+                <button class="back-btn" onclick="showView('student-dashboard')">← Öğrenci Listesi</button>
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div
+                        style="width: 80px; height: 80px; background: var(--gradient); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 2rem;">
+                        🎓</div>
+                    <h2 id="report-student-name">Öğrenci İsmi</h2>
+                    <p style="color: var(--text-muted);">Ders Notları ve Ortalamalar</p>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Ders</th>
+                                <th>Yazılı</th>
+                                <th>Sözlü</th>
+                                <th>Ortalama</th>
+                            </tr>
+                        </thead>
+                        <tbody id="report-card-body">
+                            <!-- Grades will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="average-card">
+                    <h3>Genel Ortalama</h3>
+                    <div class="score" id="general-average">0.00</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Grade Entry Modal (For Teachers) -->
+    <div id="grade-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-student-name">Not Girişi</h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div id="grade-inputs">
+                <!-- Dynamic Inputs -->
+            </div>
+            <button onclick="saveGrades()" style="margin-top: 1rem;">Kaydet ve Güncelle</button>
         </div>
     </div>
 
     <script>
-        function ekle(deger) {
-            document.getElementById("ekran").value += deger;
+        // --- Data Configuration ---
+        const studentNames = [
+            "Furkan", "Ali", "Emir", "Elif", "Emin",
+            "Mustafa", "Anıl", "Ahmet", "Emirhan", "Görkem"
+        ];
+
+        const subjects = [
+            "Edebiyat", "Beden", "Kimya", "Fizik",
+            "Matematik", "Coğrafya", "Tarih"
+        ];
+
+        let students = [];
+        let currentStudentIndex = null;
+
+        // --- Initialization ---
+        function init() {
+            const storedData = localStorage.getItem('schoolSystemData_v1');
+
+            if (storedData) {
+                students = JSON.parse(storedData);
+            } else {
+                // Initialize empty data
+                students = studentNames.map(name => {
+                    const grades = {};
+                    subjects.forEach(sub => {
+                        grades[sub] = { exam: '', oral: '' }; // Empty strings for UI consistency
+                    });
+                    return { name, grades };
+                });
+            }
+
+            renderStudentLists();
         }
 
-        function temizle() {
-            document.getElementById("ekran").value = "";
-        }
+        // --- Navigation ---
+        function showView(viewId) {
+            document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
 
-        function sil() {
-            var ekran = document.getElementById("ekran");
-            ekran.value = ekran.value.slice(0, -1);
-        }
-
-        function hesapla() {
-            try {
-                var ifade = document.getElementById("ekran").value;
-                // basit güvenlik: boşsa hesaplama yapma
-                if (!ifade.trim()) return;
-                document.getElementById("ekran").value = eval(ifade);
-            } catch {
-                document.getElementById("ekran").value = "Hata";
+            // Reset password field if leaving login
+            if (viewId !== 'teacher-login') {
+                document.getElementById('teacher-password').value = '';
             }
         }
+
+        // --- Teacher Logic ---
+        function attemptTeacherLogin() {
+            const pass = document.getElementById('teacher-password').value;
+            if (pass === "öğretmen") {
+                showView('teacher-dashboard');
+            } else {
+                alert("Hatalı şifre!");
+            }
+        }
+
+        function openGradeModal(index) {
+            currentStudentIndex = index;
+            const student = students[index];
+            document.getElementById('modal-student-name').innerText = `${student.name} - Not Girişi`;
+
+            const container = document.getElementById('grade-inputs');
+            container.innerHTML = '';
+
+            subjects.forEach(sub => {
+                const g = student.grades[sub];
+                container.innerHTML += `
+                <div class="grade-input-group">
+                    <label>${sub}</label>
+                    <input type="number" min="0" max="100" placeholder="Yazılı" value="${g.exam}" id="exam-${sub}">
+                    <input type="number" min="0" max="100" placeholder="Sözlü" value="${g.oral}" id="oral-${sub}">
+                </div>
+            `;
+            });
+
+            document.getElementById('grade-modal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('grade-modal').classList.remove('active');
+            currentStudentIndex = null;
+        }
+
+        function saveGrades() {
+            if (currentStudentIndex === null) return;
+
+            const student = students[currentStudentIndex];
+
+            subjects.forEach(sub => {
+                const examVal = document.getElementById(`exam-${sub}`).value;
+                const oralVal = document.getElementById(`oral-${sub}`).value;
+
+                student.grades[sub] = {
+                    exam: examVal,
+                    oral: oralVal
+                };
+            });
+
+            localStorage.setItem('schoolSystemData_v1', JSON.stringify(students));
+            closeModal();
+            alert("Notlar başarıyla kaydedildi!");
+        }
+
+        // --- Data Rendering ---
+        function renderStudentLists() {
+            const teacherList = document.getElementById('teacher-student-list');
+            const studentSelectionList = document.getElementById('student-selection-list');
+
+            let teacherHTML = '';
+            let studentHTML = '';
+
+            students.forEach((s, idx) => {
+                // Teacher card
+                teacherHTML += `
+                <div class="student-card" onclick="openGradeModal(${idx})">
+                    <div style="font-size: 2rem;">👤</div>
+                    <span>${s.name}</span>
+                </div>
+            `;
+
+                // Student selection card
+                studentHTML += `
+                <div class="student-card" onclick="viewReportCard(${idx})">
+                    <div style="font-size: 2rem;">👤</div>
+                    <span>${s.name}</span>
+                </div>
+            `;
+            });
+
+            teacherList.innerHTML = teacherHTML;
+            studentSelectionList.innerHTML = studentHTML;
+        }
+
+        // --- Student / Report Card Logic ---
+        function viewReportCard(index) {
+            const student = students[index];
+            document.getElementById('report-student-name').innerText = student.name;
+
+            const tbody = document.getElementById('report-card-body');
+            tbody.innerHTML = '';
+
+            let totalAvg = 0;
+            let validSubjectCount = 0;
+
+            subjects.forEach(sub => {
+                const g = student.grades[sub];
+                let avgDisplay = '-';
+                let avgVal = null;
+
+                // Calculate subject average if both exist
+                if (g.exam !== '' && g.oral !== '') {
+                    const e = parseFloat(g.exam);
+                    const o = parseFloat(g.oral);
+                    avgVal = (e + o) / 2;
+                    avgDisplay = avgVal.toFixed(1);
+
+                    totalAvg += avgVal;
+                    validSubjectCount++;
+                } else if (g.exam !== '') {
+                    // Should we calc average if only one exists? Usually not, but let's handle gracefully
+                    // For now, require both for average, or treat empty as ?
+                    // The prompt implies both are entered. 
+                }
+
+                tbody.innerHTML += `
+                <tr>
+                    <td>${sub}</td>
+                    <td>${g.exam === '' ? '-' : g.exam}</td>
+                    <td>${g.oral === '' ? '-' : g.oral}</td>
+                    <td style="font-weight: bold; color: ${avgVal !== null ? (avgVal >= 50 ? '#4ade80' : '#f87171') : 'inherit'}">${avgDisplay}</td>
+                </tr>
+            `;
+            });
+
+            const generalAvg = validSubjectCount > 0 ? (totalAvg / validSubjectCount).toFixed(2) : '0.00';
+            const genAvgEl = document.getElementById('general-average');
+            genAvgEl.innerText = generalAvg;
+
+            // Color code general average
+            if (parseFloat(generalAvg) >= 50) {
+                genAvgEl.style.color = '#fff';
+            } else if (validSubjectCount > 0) {
+                genAvgEl.style.color = '#fccaec'; // Soft red/pinkish
+            }
+
+            showView('report-card');
+        }
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+
     </script>
 
 </body>
